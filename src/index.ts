@@ -105,7 +105,7 @@ agent.post(reqBody);
 setTimeout(() => {
   agent.getId('600');
   agent.patch('600', newReqBody);
-}, 100);
+}, 500);
 
 setTimeout(() => {
   agent.delete('600');
