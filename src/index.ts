@@ -5,51 +5,76 @@ type body = {
   isImportant: boolean;
   isComplited: boolean;
 };
-class BaseAgent {
-  baseUrl = 'https://intership-liga.ru/tasks/';
-  method: string;
-  body: body;
+// 'https://intership-liga.ru/tasks/'
+class Agent {
+  private baseUrl: string;
 
-  constructor(method: string, body: body) {
-    this.method = method;
-    this.body = body;
+  constructor(baseUrl: string) {
+    this.baseUrl = baseUrl;
   }
 
-  getMethod(): void {
-    console.log(this.method, this.body);
-  }
-}
-
-class ReqAgent extends BaseAgent {
-  constructor(method: string, body: body) {
-    super(method, body);
-  }
-
-  async resPromiseGet(): Promise<void> {
+  async get(): Promise<void> {
     try {
       const res = await fetch(this.baseUrl, {
-        method: this.method,
+        method: 'GET',
       });
-      const time = new Date();
       const response = await res.json();
-      console.log(response, time);
+      console.log('Список получен \n', response);
     } catch {
       throw new Error('Error');
     }
   }
-  async resPromisePost(): Promise<void> {
+  async post(body: body): Promise<void> {
     try {
       const res = await fetch(this.baseUrl, {
         method: 'POST',
         headers: {
           'content-type': 'application/json',
         },
-        body: JSON.stringify(this.body),
+        body: JSON.stringify(body),
       });
-      console.log(this.body);
-      const time = new Date();
       const response = await res.json();
-      console.log(response, time);
+      console.log('Запись добавлена \n', response);
+    } catch (e) {
+      throw new Error(e);
+    }
+  }
+  async getId(path: string): Promise<void> {
+    try {
+      const res = await fetch(this.baseUrl + path, {
+        method: 'GET',
+      });
+      const response = await res.json();
+      console.log('Запись получена \n', response);
+    } catch {
+      throw new Error('Error');
+    }
+  }
+  async patch(path: string, body: body): Promise<void> {
+    try {
+      const res = await fetch(this.baseUrl + path, {
+        method: 'PATCH',
+        headers: {
+          'content-type': 'application/json',
+        },
+        body: JSON.stringify(body),
+      });
+      const response = await res.json();
+      console.log('Запись изменена \n', response);
+    } catch (e) {
+      throw new Error(e);
+    }
+  }
+  async delete(path: string): Promise<void> {
+    try {
+      const res = await fetch(this.baseUrl + path, {
+        method: 'DELETE',
+        headers: {
+          'content-type': 'application/json',
+        },
+      });
+      const response = await res.json();
+      console.log('Запись удалена \n', response);
     } catch (e) {
       throw new Error(e);
     }
@@ -58,13 +83,30 @@ class ReqAgent extends BaseAgent {
 
 const reqBody: body = {
   id: 600,
-  name: 'Client',
+  name: 'Boss',
   info: 'Lorem ipsum dolor sit amet consectetur.',
   isImportant: false,
   isComplited: true,
 };
 
-const a = new ReqAgent('GET', reqBody);
-a.getMethod();
-// a.resPromisePost();
-a.resPromiseGet();
+const newReqBody: body = {
+  id: 600,
+  name: 'Client',
+  info: 'Lorem sit amet consectetur.',
+  isImportant: false,
+  isComplited: true,
+};
+
+const agent = new Agent('https://intership-liga.ru/tasks/');
+
+agent.get();
+agent.post(reqBody);
+
+setTimeout(() => {
+  agent.getId('600');
+  agent.patch('600', newReqBody);
+}, 100);
+
+setTimeout(() => {
+  agent.delete('600');
+}, 1000);

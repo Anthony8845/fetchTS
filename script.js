@@ -1,4 +1,4 @@
-const url = 'https://intership-liga.ru/tasks/';
+// const url = 'https://intership-liga.ru/tasks/';
 
 // const resPromisePost = fetch(url, {
 //   method: 'POST',
@@ -31,11 +31,11 @@ const url = 'https://intership-liga.ru/tasks/';
 //   }
 // }
 
-// class Agent extends BaseAgent {
-//   constructor(option) {
-//     super(option);
-//   }
-// }
+// // class Agent extends BaseAgent {
+// //   constructor(option) {
+// //     super(option);
+// //   }
+// // }
 
-// let a = new Agent('hi');
-// a.resPromisePost();
+// // let a = new Agent('hi');
+// // a.resPromisePost();
